@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Vaccine Name -->
+    <TextView
+        android:id="@+id/tvVaccineName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Rabia"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        tools:text="Rabia" />
+
+    <!-- Vaccine Date -->
+    <TextView
+        android:id="@+id/tvVaccineDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mar 2024"
+        android:textColor="#999999"
+        android:textSize="14sp"
+        tools:text="Mar 2024" />
+
+</LinearLayout> 
