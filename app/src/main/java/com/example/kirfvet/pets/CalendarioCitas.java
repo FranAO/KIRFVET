@@ -17,6 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kirfvet.R;
+import com.example.kirfvet.main.MainActivity;
+import com.example.kirfvet.shop.Tienda;
+import com.example.kirfvet.utils.InfoUsuario;
+import com.example.kirfvet.AgendarCitas;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +42,7 @@ public class CalendarioCitas extends AppCompatActivity {
     private SimpleDateFormat monthFormat;
     private SimpleDateFormat dayFormat;
     private int selectedDay = -1;
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +85,10 @@ public class CalendarioCitas extends AppCompatActivity {
         btnAgregarCita = findViewById(R.id.btnAgregarCita);
         tvFechaSeleccionada = findViewById(R.id.tvFechaSeleccionada);
         layoutEstadoVacio = findViewById(R.id.layoutEstadoVacio);
+        bottomNavigation = findViewById(R.id.bottomNavigation);
+
+        // Marcar el ítem del calendario como seleccionado
+        bottomNavigation.setSelectedItemId(R.id.navigation_calendar);
 
         // Configurar RecyclerViews
         recyclerCalendario.setLayoutManager(new GridLayoutManager(this, 7));
@@ -100,6 +110,39 @@ public class CalendarioCitas extends AppCompatActivity {
             // TODO: Implementar lógica para agregar cita
             Toast.makeText(this, "Agregar cita", Toast.LENGTH_SHORT).show();
         });
+
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                android.content.Intent intent = new android.content.Intent(this, MainActivity.class);
+                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.navigation_calendar) {
+                return true;
+            } else if (itemId == R.id.navigation_cart) {
+                android.content.Intent intent = new android.content.Intent(this, Tienda.class);
+                intent.addFlags(android.content.Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.navigation_user) {
+                android.content.Intent intent = new android.content.Intent(this, InfoUsuario.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.navigation_add) {
+                android.content.Intent intent = new android.content.Intent(this, AgendarCitas.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Asegurarse de que el ítem de 'calendario' esté seleccionado al volver a esta actividad
+        bottomNavigation.setSelectedItemId(R.id.navigation_calendar);
     }
 
     private void updateCalendar() {

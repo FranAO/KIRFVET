@@ -1,6 +1,7 @@
 package com.example.kirfvet.main;
 
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.kirfvet.R;
+import com.example.kirfvet.pets.CalendarioCitas;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.card.MaterialCardView;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private MaterialCardView searchBar;
     private EditText searchEditText;
     private ImageView searchIcon;
+    private BottomNavigationView bottomNavigation;
     
     // Variables de control
     private boolean isExpanded = false;
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
         searchBar = findViewById(R.id.searchBar);
         searchEditText = findViewById(R.id.searchEditText);
         searchIcon = findViewById(R.id.searchIcon);
+        bottomNavigation = findViewById(R.id.bottomNavigation);
 
         // Configurar ancho inicial
         ViewGroup.LayoutParams params = searchBar.getLayoutParams();
@@ -83,6 +88,34 @@ public class MainActivity extends AppCompatActivity {
         // Evitar que el click en el search bar se propague
         searchBar.setOnClickListener(v -> {});
 
+        // Configurar listener para el menú de navegación
+        bottomNavigation.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_calendar) {
+                Intent intent = new Intent(this, com.example.kirfvet.pets.CalendarioCitas.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.navigation_home) {
+                // Ya estamos en home, solo permite la selección.
+                return true;
+            } else if (itemId == R.id.navigation_user) {
+                Intent intent = new Intent(this, com.example.kirfvet.utils.InfoUsuario.class);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.navigation_cart) {
+                Intent intent = new Intent(this, com.example.kirfvet.shop.Tienda.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return true;
+            } else if (itemId == R.id.navigation_add) {
+                Intent intent = new Intent(this, com.example.kirfvet.AgendarCitas.class);
+                startActivity(intent);
+                return true;
+            }
+            return false;
+        });
+
         // Configurar insets del sistema SOLO lateral y superior, NO inferior
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -97,6 +130,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(0, 0, 0, bottomInset);
             return insets;
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Asegurarse de que el ítem de 'home' esté seleccionado al volver a esta actividad
+        bottomNavigation.setSelectedItemId(R.id.navigation_home);
     }
 
     // Verifica si las coordenadas están dentro del área del view
